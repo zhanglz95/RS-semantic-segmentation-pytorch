@@ -4,7 +4,7 @@
 [![pytorch-image]][pytorch-url]
 [![lic-image]][lic-url]
 
-This repo aims at implementing multiple semantic segmentation models on Pytorch(*1.x*) for RS(*RemoteSensing*) image datasets.
+This repo aims at implementing multiple semantic segmentation models on Pytorch( *1.x* ) for RS( *RemoteSensing* ) image datasets.
 
 
 [python-image]: https://img.shields.io/badge/Python-3.x-ff69b4.svg
