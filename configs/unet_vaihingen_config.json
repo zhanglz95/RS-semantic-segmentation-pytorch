@@ -1,0 +1,32 @@
+{
+    "model": "UNet",
+    "model_configs":{
+        "input_channels": 3,
+        "num_classes": 1,
+        "bilinear": true
+    },
+    "dataset_name": "VaihingenDataset",
+    "dataset_configs":{
+        "scale": 1.0
+    },
+    "use_gpu": true,
+
+    "batchsize": 4,
+    "epochs": 20,
+
+    "loss": "BCEWithLogitsLoss",
+    "optimizer": "RMSprop",
+    "optimizer_configs":{
+        "lr": 1e-4,
+        "weight_decay": 1e-8,
+        "momentum": 0.9
+    },
+    "scheduler": "ReduceLROnPlateau",
+    "val_percent": 0.1,
+    "val_interval": 200,
+
+    "resume_path": null,
+    "checkpoint_path": "./checkpoints/",
+
+    "tb_dir": "./runs"
+}

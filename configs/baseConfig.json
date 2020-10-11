@@ -1,0 +1,30 @@
+{
+    "model": "UNet",
+    "dataset_name": "",
+    "num_classes": 1,
+    "use_gpu": true,
+
+    "scale": 1.0,
+
+    "batchsize": 4,
+    "lr": 0.001,
+    "epochs": 20,
+
+    "loss": "BCEWithLogitsLoss",
+    "optimizer": "RMSprop",
+    "optimizer_configs":{
+
+    },
+    "scheduler": "ReduceLROnPlateau",
+    "scheduler_configs":{
+
+    },
+
+    "val_percent": 0.1,
+    "val_interval": 200,
+
+    "resume_path": null,
+    "checkpoint_path": "./checkpoint/",
+
+    "tb_dir": "./runs"
+}
