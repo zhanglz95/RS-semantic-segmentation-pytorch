@@ -1,0 +1,7 @@
+pillow==7.2.0
+torch==1.1.0
+torchvision==0.3.0
+tensorboard==2.3.0
+tqdm==4.49.0
+numpy==1.19.2
+future==0.18.2

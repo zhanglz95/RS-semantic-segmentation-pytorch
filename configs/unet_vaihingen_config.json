@@ -17,7 +17,7 @@
     "loss": "BCEWithLogitsLoss",
     "optimizer": "RMSprop",
     "optimizer_configs":{
-        "lr": 1e-4,
+        "lr": 1e-3,
         "weight_decay": 1e-8,
         "momentum": 0.9
     },
