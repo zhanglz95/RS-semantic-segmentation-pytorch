@@ -1,0 +1,31 @@
+{
+    "model": "OCDNet",
+    "model_configs":{
+        "input_channels": 3,
+        "num_classes": 1
+    },
+    "dataset_name": "CarvanaDataset",
+    "dataset_configs":{
+        "scale": [480, 320],
+        "isEdge": true
+    },
+    "use_gpu": true,
+    "val_interval": 100,
+    "batchsize": 8,
+    "epochs": 20,
+
+    "loss": "BCEWithLogitsLoss",
+    "optimizer": "SGD",
+    "optimizer_configs":{
+        "lr": 1e-4,
+        "weight_decay": 2e-4,
+        "momentum": 0.9
+    },
+    "scheduler": "ReduceLROnPlateau",
+    "val_percent": 0.05,
+
+    "resume_path": null,
+    "checkpoint_path": "./checkpoints/",
+
+    "tb_dir": "./runs"
+}

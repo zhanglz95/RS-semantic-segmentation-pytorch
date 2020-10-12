@@ -13,7 +13,12 @@ class BaseDataset(Dataset):
         self.masks_dir = masks_dir
         self.scale = scale
         self.mask_suffix = mask_suffix
-        assert 0 < scale <= 1, 'Scale must be between 0 and 1'
+
+        if isinstance(self.scale, list):
+            assert len(self.scale) == 2, 'Scale list must have 2 elements'
+            assert 0 < self.scale[0] and 0 < self.scale[1], 'Scale elements must larger than zero'
+        else:
+            assert 0 < scale <= 1, 'Scale must be between 0 and 1'
 
         self.ids = [splitext(file)[0] for file in listdir(imgs_dir)]
 
@@ -23,7 +28,10 @@ class BaseDataset(Dataset):
     @classmethod
     def preprocess(cls, img, scale):
         w, h = img.size
-        newW, newH = int(scale * w), int(scale * h)
+        if isinstance(scale, list):
+            newW, newH = scale[0], scale[1]
+        else:
+            newW, newH = int(scale * w), int(scale * h)
         assert newW > 0 and newH > 0, 'Scale is too small'
         img = img.resize((newW, newH))
 

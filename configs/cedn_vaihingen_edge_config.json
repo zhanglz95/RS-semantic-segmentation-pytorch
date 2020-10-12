@@ -1,29 +1,28 @@
 {
-    "model": "UNet",
+    "model": "OCDNet",
     "model_configs":{
         "input_channels": 3,
-        "num_classes": 1,
-        "bilinear": true
+        "num_classes": 1
     },
     "dataset_name": "VaihingenDataset",
     "dataset_configs":{
-        "scale": 1.0
+        "scale": 1.0,
+        "isEdge": true
     },
     "use_gpu": true,
-
+    "val_interval": 100,
     "batchsize": 4,
     "epochs": 20,
 
     "loss": "BCEWithLogitsLoss",
-    "optimizer": "RMSprop",
+    "optimizer": "SGD",
     "optimizer_configs":{
-        "lr": 1e-3,
-        "weight_decay": 1e-8,
+        "lr": 0.1,
+        "weight_decay": 2e-4,
         "momentum": 0.9
     },
     "scheduler": "ReduceLROnPlateau",
     "val_percent": 0.1,
-    "val_interval": 200,
 
     "resume_path": null,
     "checkpoint_path": "./checkpoints/",

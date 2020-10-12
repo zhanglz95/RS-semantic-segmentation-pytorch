@@ -3,7 +3,7 @@ from pathlib import Path
 import os
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
-
+import torch.nn as nn
 import loss as L
 import optimizer as O
 from eval import eval_net
@@ -23,10 +23,10 @@ class Trainer():
         # general config
         self.num_classes = self.configs['model_configs']['num_classes']
         self.epochs = self.configs['epochs']
-        self.val_interval = self.configs['val_interval']
         self.lr = self.configs['optimizer_configs']['lr']
         self.bs = self.configs['batchsize']
         self.sc = self.configs['dataset_configs']['scale']
+        self.val_interval = self.configs['val_interval']
 
         # Device
         if self.configs['use_gpu']:
@@ -68,10 +68,10 @@ class Trainer():
         for epoch in range(self.epochs):
             # train one epoch
             self.model.train()
-            self.global_step += 1
-            with tqdm(total=len(self.train_loader), desc=f'Epoch {epoch+1}/{self.epochs}', unit='image') as pbar:
+            
+            with tqdm(total=len(self.train_loader), desc=f'Epoch {epoch+1}/{self.epochs}', unit='batch') as pbar:
                 for imgs, true_masks in self.train_loader:
-
+                    self.global_step += 1
                     imgs = imgs.to(device=self.device, dtype=torch.float32)
                     mask_type = torch.float32 if self.num_classes == 1 else torch.long
                     true_masks = true_masks.to(device=self.device, dtype=mask_type)
@@ -84,22 +84,23 @@ class Trainer():
 
                     self.optimizer.zero_grad()
                     loss.backward()
-                    # nn.utils.clip_grad_value_(self.model.parameters(), 0.1)
+                    nn.utils.clip_grad_value_(self.model.parameters(), 0.1)
                     self.optimizer.step()
 
                     pbar.update()
-            val_score = eval_net(self.model, self.val_loader, self.num_classes, self.device)
-            self.scheduler.step(val_score)
-            self.tb_writer.add_scalar('learning_rate', self.optimizer.param_groups[0]['lr'], self.global_step)
+                    if self.global_step % self.val_interval == 0:
+                        val_score = eval_net(self.model, self.val_loader, self.num_classes, self.device)
+                        self.scheduler.step(val_score)
+                        self.tb_writer.add_scalar('learning_rate', self.optimizer.param_groups[0]['lr'], self.global_step)
 
-            self.logger.info('Validation Score: {}'.format(val_score))
-            self.tb_writer.add_scalar('score/test', val_score, self.global_step)
+                        self.logger.info('Validation Score: {}'.format(val_score))
+                        self.tb_writer.add_scalar('score/test', val_score, self.global_step)
 
-            self.tb_writer.add_images('images', imgs, self.global_step)
-            if self.num_classes == 1:
-                self.tb_writer.add_images('masks/true', true_masks, self.global_step)
-                self.tb_writer.add_images('masks/pred', torch.sigmoid(pred_masks) > 0.5, self.global_step)
-            self.save_checkpoint(f'{self.model_name}_{self.dataset_name}', epoch)
+                        self.tb_writer.add_images('images', imgs, self.global_step)
+                        if self.num_classes == 1:
+                            self.tb_writer.add_images('masks/true', true_masks, self.global_step)
+                            self.tb_writer.add_images('masks/pred', torch.sigmoid(pred_masks) > 0.5, self.global_step)
+                        self.save_checkpoint(f'{self.model_name}_{self.dataset_name}', self.global_step)
 
     def save_checkpoint(self, name, epoch):
         filename = Path(self.cp_path) / f'{name}_{epoch}.pth'

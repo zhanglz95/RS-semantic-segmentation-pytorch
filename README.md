@@ -20,6 +20,8 @@ git clone https://github.com/zhanglz95/RS-semantic-segmentation-pytorch.git
 ```
 ## Todo
 - [X] U-Net - Convolutional Networks for Biomedical Image Segmentation (2015). [[Paper]](https://arxiv.org/abs/1505.04597)
+- [X] CEDN - Object Contour Detection with a Fully Convolutional Encoder-Decoder Network (2016). [[Papar]](http://openaccess.thecvf.com/content_cvpr_2016/papers/Yang_Object_Contour_Detection_CVPR_2016_paper.pdf)
+- [ ] Dinknet - D-LinkNet: LinkNet With Pretrained Encoder and Dilated Convolution for High Resolution Satellite Imagery Road Extraction. [[Paper]](http://openaccess.thecvf.com/content_cvpr_2018_workshops/w4/html/Zhou_D-LinkNet_LinkNet_With_CVPR_2018_paper.html)[[Code]](https://github.com/zlkanata/DeepGlobe-Road-Extraction-Challenge)
 
 ## Usage
 ### Train
@@ -39,6 +41,8 @@ python train.py -c_dir "./configs/configs_folder/"
 [awesome-semantic-segmentation-pytorch](https://github.com/Tramac/awesome-semantic-segmentation-pytorch)
 
 [Pytorch-UNet](https://github.com/milesial/Pytorch-UNet)
+
+[OCD-PyTorch](https://github.com/dlam4h/OCD-PyTorch)
 
 [python-image]: https://img.shields.io/badge/Python-3.x-ff69b4.svg
 [python-url]: https://www.python.org/
