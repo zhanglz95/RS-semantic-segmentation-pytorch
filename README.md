@@ -13,8 +13,10 @@ The code was tested with Anaconda, python3.7. You will do the follow to be ready
 # RS-semantic-segmentation-pytorch dependencies, torch and torchvision are installed by pip.
 pip install -r requirements.txt
 
-# Then clone this Repo:
-
+# Then clone this Repo using SSH:
+git clone git@github.com:zhanglz95/RS-semantic-segmentation-pytorch.git
+# or using HTTPS:
+git clone https://github.com/zhanglz95/RS-semantic-segmentation-pytorch.git
 ```
 ## Todo
 - [X] U-Net - Convolutional Networks for Biomedical Image Segmentation (2015). [[Paper]](https://arxiv.org/abs/1505.04597)
