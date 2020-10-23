@@ -43,7 +43,10 @@ def train(config_path):
     n_train = len(train_dataset) - n_val
     train_dataset, val_dataset = random_split(train_dataset, [n_train, n_val])
     train_loader = DataLoader(train_dataset, batch_size=configs['batchsize'], shuffle=True, num_workers=8, pin_memory=True)
-    val_loader = DataLoader(val_dataset, batch_size=configs['batchsize'], shuffle=True, num_workers=8, pin_memory=True)
+    if configs['hasVal']:
+        val_loader = DataLoader(val_dataset, batch_size=configs['batchsize'], shuffle=True, num_workers=8, pin_memory=True)
+    else:
+        val_loader = None
     
     #initial model
     model = getattr(M, configs['model'])(**configs['model_configs'])

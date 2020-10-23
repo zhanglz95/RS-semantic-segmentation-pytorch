@@ -1,24 +1,25 @@
 {
-    "model": "OCDNet",
+    "model": "MiniUNet",
     "model_configs":{
         "input_channels": 3,
         "num_classes": 1
     },
-    "dataset_name": "VaihingenDataset",
+    "dataset_name": "PASCALDataset",
     "dataset_configs":{
-        "scale": 1.0,
-        "isEdge": true
+        "scale": [480, 320],
+        "imgPath": "./data/pascal_test/imgs/",
+        "edgePath": "./data/pascal_test/edges/"
     },
     "use_gpu": true,
-    "val_interval": 200,
+    "val_interval": 50,
     "batchsize": 4,
-    "epochs": 20,
+    "epochs": 2000,
 
-    "loss": "weighted_cross_entropy_loss",
-    "optimizer": "RMSprop",
+    "loss": "BCEWithLogitsLoss",
+    "optimizer": "SGD",
     "optimizer_configs":{
-        "lr": 1e-4,
-        "weight_decay": 1e-8,
+        "lr": 0.01,
+        "weight_decay": 2e-4,
         "momentum": 0.9
     },
     "scheduler": "ReduceLROnPlateau",
@@ -27,7 +28,8 @@
         "factor": 0.1,
         "patience": 2
     },
-    "val_percent": 0.1,
+    "hasVal": false,
+    "val_percent": 0.2,
 
     "resume_path": null,
     "checkpoint_path": "./checkpoints/",

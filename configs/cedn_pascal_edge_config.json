@@ -1,24 +1,23 @@
 {
-    "model": "OCDNet",
+    "model": "OCDNetBN",
     "model_configs":{
         "input_channels": 3,
         "num_classes": 1
     },
-    "dataset_name": "VaihingenDataset",
+    "dataset_name": "PASCALDataset",
     "dataset_configs":{
-        "scale": 1.0,
-        "isEdge": true
+        "scale": [480, 320]
     },
     "use_gpu": true,
-    "val_interval": 200,
-    "batchsize": 4,
-    "epochs": 20,
+    "val_interval": 500,
+    "batchsize": 8,
+    "epochs": 100,
 
-    "loss": "weighted_cross_entropy_loss",
-    "optimizer": "RMSprop",
+    "loss": "BCEWithLogitsLoss",
+    "optimizer": "SGD",
     "optimizer_configs":{
-        "lr": 1e-4,
-        "weight_decay": 1e-8,
+        "lr": 0.01,
+        "weight_decay": 2e-4,
         "momentum": 0.9
     },
     "scheduler": "ReduceLROnPlateau",
@@ -27,6 +26,7 @@
         "factor": 0.1,
         "patience": 2
     },
+    "hasVal": true,
     "val_percent": 0.1,
 
     "resume_path": null,

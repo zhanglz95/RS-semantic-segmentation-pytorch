@@ -1,20 +1,20 @@
 {
-    "model": "OCDNet",
+    "model": "UNet",
     "model_configs":{
         "input_channels": 3,
         "num_classes": 1
     },
-    "dataset_name": "VaihingenDataset",
+    "dataset_name": "CarvanaDataset",
     "dataset_configs":{
-        "scale": 1.0,
-        "isEdge": true
+        "scale": [480, 320],
+        "isEdge": false
     },
     "use_gpu": true,
     "val_interval": 200,
     "batchsize": 4,
     "epochs": 20,
 
-    "loss": "weighted_cross_entropy_loss",
+    "loss": "BCEWithLogitsLoss",
     "optimizer": "RMSprop",
     "optimizer_configs":{
         "lr": 1e-4,

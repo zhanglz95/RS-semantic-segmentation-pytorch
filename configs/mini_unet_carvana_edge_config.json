@@ -1,17 +1,17 @@
 {
-    "model": "OCDNet",
+    "model": "MiniUNet",
     "model_configs":{
         "input_channels": 3,
         "num_classes": 1
     },
-    "dataset_name": "VaihingenDataset",
+    "dataset_name": "CarvanaDataset",
     "dataset_configs":{
         "scale": 1.0,
         "isEdge": true
     },
     "use_gpu": true,
     "val_interval": 200,
-    "batchsize": 4,
+    "batchsize": 1,
     "epochs": 20,
 
     "loss": "weighted_cross_entropy_loss",
@@ -27,6 +27,7 @@
         "factor": 0.1,
         "patience": 2
     },
+    "hasVal": true,
     "val_percent": 0.1,
 
     "resume_path": null,

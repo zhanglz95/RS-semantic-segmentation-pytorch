@@ -10,19 +10,25 @@
         "isEdge": true
     },
     "use_gpu": true,
-    "val_interval": 100,
-    "batchsize": 8,
+    "val_interval": 200,
+    "batchsize": 4,
     "epochs": 20,
 
     "loss": "BCEWithLogitsLoss",
-    "optimizer": "SGD",
+    "optimizer": "RMSprop",
     "optimizer_configs":{
         "lr": 1e-4,
-        "weight_decay": 2e-4,
+        "weight_decay": 1e-8,
         "momentum": 0.9
     },
     "scheduler": "ReduceLROnPlateau",
-    "val_percent": 0.05,
+    "scheduler_configs":{
+        "mode": "min",
+        "factor": 0.1,
+        "patience": 2
+    },
+    "hasVal": true,
+    "val_percent": 0.1,
 
     "resume_path": null,
     "checkpoint_path": "./checkpoints/",

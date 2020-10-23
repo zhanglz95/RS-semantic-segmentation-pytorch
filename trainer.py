@@ -41,8 +41,7 @@ class Trainer():
             self.resume_checkpoint(self.configs['resume_path'])
 
         # tensorboard config
-        self.tb_writer = SummaryWriter(comment=f'MODEL_{self.model_name}_LR_{self.lr}_BS_{self.bs}_SCALE_{self.sc}',
-                                       log_dir=self.configs['tb_dir'])
+        self.tb_writer = SummaryWriter(comment=f'MODEL_{self.model_name}_DS_{self.dataset_name}_LR_{self.lr}_BS_{self.bs}_SCALE_{self.sc}')
         self.global_step = 0
 
         # loss function
@@ -52,12 +51,11 @@ class Trainer():
         self.optimizer = getattr(O, self.configs['optimizer'])(self.model.parameters(), **self.configs['optimizer_configs'])
 
         # scheduler
-        if(self.configs['scheduler'] == ''):
-            # self.scheduler = scheduler above
-            pass
-        else:
+        if(self.configs['scheduler'] == 'ReduceLROnPlateau'):
             # default scheduler
-            self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, 'min' if self.num_classes > 1 else 'max', patience=2)
+            self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, **self.configs['scheduler_configs'])
+        else:
+            self.scheduler = None
 
         # checkpoint save path
         self.cp_path = self.configs['checkpoint_path']
@@ -86,15 +84,17 @@ class Trainer():
                     loss.backward()
                     nn.utils.clip_grad_value_(self.model.parameters(), 0.1)
                     self.optimizer.step()
-
                     pbar.update()
-                    if self.global_step % self.val_interval == 0:
-                        val_score = eval_net(self.model, self.val_loader, self.num_classes, self.device)
-                        self.scheduler.step(val_score)
-                        self.tb_writer.add_scalar('learning_rate', self.optimizer.param_groups[0]['lr'], self.global_step)
 
-                        self.logger.info('Validation Score: {}'.format(val_score))
-                        self.tb_writer.add_scalar('score/test', val_score, self.global_step)
+                    if self.global_step % self.val_interval == 0:
+                        if self.val_loader:
+                            val_score = eval_net(self.model, self.val_loader, self.num_classes, self.device)
+                            if self.scheduler:
+                                self.scheduler.step(val_score)
+                                self.tb_writer.add_scalar('learning_rate', self.optimizer.param_groups[0]['lr'], self.global_step)
+
+                            self.logger.info('Validation Score: {}'.format(val_score))
+                            self.tb_writer.add_scalar('score/test', val_score, self.global_step)
 
                         self.tb_writer.add_images('images', imgs, self.global_step)
                         if self.num_classes == 1:
