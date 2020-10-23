@@ -11,7 +11,7 @@
     },
     "use_gpu": true,
     "val_interval": 200,
-    "batchsize": 32,
+    "batchsize": 80,
     "epochs": 20,
 
     "loss": "weighted_cross_entropy_loss",

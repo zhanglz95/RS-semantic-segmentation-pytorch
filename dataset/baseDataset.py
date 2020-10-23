@@ -6,13 +6,15 @@ import numpy as np
 from glob import glob
 from PIL import Image
 import torch
+import time
 
 class BaseDataset(Dataset):
-    def __init__(self, imgs_dir, masks_dir, scale=1, mask_suffix=""):
+    def __init__(self, imgs_dir, masks_dir, scale=1, img_suffix=".jpg", mask_suffix=".png"):
         self.imgs_dir = imgs_dir
         self.masks_dir = masks_dir
         self.scale = scale
         self.mask_suffix = mask_suffix
+        self.img_suffix = img_suffix
 
         if isinstance(self.scale, list):
             assert len(self.scale) == 2, 'Scale list must have 2 elements'
@@ -48,24 +50,19 @@ class BaseDataset(Dataset):
 
     def __getitem__(self, i):
         idx = self.ids[i]
-        mask_file = glob(
-            os.path.join(self.masks_dir, idx + self.mask_suffix + '.*')
-        )
-        img_file = glob(
-            os.path.join(self.imgs_dir, idx + '.*')
-        )
 
-        assert len(mask_file) == 1, \
-            f'Either no mask or multiple masks found for the ID {idx}: {mask_file}'
-        assert len(img_file) == 1, \
-            f'Either no image or multiple images found for the ID {idx}: {img_file}'
-        mask = Image.open(mask_file[0])
-        img = Image.open(img_file[0])
+        mask_file = os.path.join(self.masks_dir, idx + self.mask_suffix)
+        img_file = os.path.join(self.imgs_dir, idx + self.img_suffix)
+
+        assert os.path.exists(mask_file), f'No mask file found for the ID {idx}: {mask_file}'
+        assert os.path.exists(img_file), f'No image file found for the ID {idx}: {img_file}'
+
+        mask = Image.open(mask_file)
+        img = Image.open(img_file)
 
         assert img.size == mask.size, \
             f'Image and mask {idx} should be the same size, but are img:{img.size} and mask:{mask.size}'
         
         img = self.preprocess(img, self.scale)
         mask = self.preprocess(mask, self.scale)
-
         return img, mask
